@@ -1,6 +1,32 @@
+import pandas as pd
+
+# Membaca data makanan
+karbohidrat = pd.read_csv('MakananKarbohidrat.csv')
+protein = pd.read_csv('MakananProtein.csv')
+lemak = pd.read_csv('MakananLemak.csv')
+serat = pd.read_csv('MakananSerat.csv')
+
+
+# Menambahkan kategori makanan
+karbohidrat['Kategori'] = 'Karbohidrat'
+protein['Kategori'] = 'Protein'
+lemak['Kategori'] = 'Lemak'
+serat['Kategori'] = 'Serat'
+
+# Menggabungkan semua data
+data_makanan = pd.concat([karbohidrat, protein, lemak, serat], ignore_index=True)
+
+# 1. Input dari pengguna
+berat_badan = float(input("Berat badanmu (kg): "))
+tinggi_badan = float(input("Tinggi badanmu (cm): "))
+usia = int(input("Usiamu (tahun): "))
+kelamin = input("Kelaminmu (pria/wanita): ")
+
+# 2. Hitung IMT
 def hitung_IMT(berat_badan, tinggi_badan):
     return berat_badan / (tinggi_badan / 100) ** 2
 
+# 3. Menentukan berat badan ideal
 def hitung_berat_badan_ideal(tinggi_badan, kelamin):
     if kelamin.lower() == "pria":
         return (tinggi_badan - 100) - ((tinggi_badan - 100) * 0.10)
@@ -9,6 +35,7 @@ def hitung_berat_badan_ideal(tinggi_badan, kelamin):
     else:
         return None
 
+# 4. Menghitung kebutuhan kalori harian
 def hitung_BMR(berat_badan, tinggi_badan, usia, kelamin):
     if kelamin.lower() == "pria":
         return 66 + (13.7 * berat_badan) + (5 * tinggi_badan) - (6.8 * usia)
@@ -17,11 +44,6 @@ def hitung_BMR(berat_badan, tinggi_badan, usia, kelamin):
     else:
         return None
 
-# Input dari pengguna
-berat_badan = float(input("Berat badanmu (kg): "))
-tinggi_badan = float(input("Tinggi badanmu (cm): "))
-usia = int(input("Usiamu (tahun): "))
-kelamin = input("Kelaminmu (pria/wanita): ")
 
 # Perhitungan
 imt = hitung_IMT(berat_badan, tinggi_badan)
