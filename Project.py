@@ -22,6 +22,15 @@ tinggi_badan = float(input("Tinggi badanmu (cm): "))
 usia = int(input("Usiamu (tahun): "))
 kelamin = input("Kelaminmu (pria/wanita): ")
 
+# Pilihan tingkat aktivitas
+print("\nTentukan tingkat aktivitasmu:")
+print("1. Sedentary (Jarang berolahraga)")
+print("2. Lightly Active (Olahraga ringan 1-3 hari/minggu)")
+print("3. Moderately Active (Olahraga sedang 3-5 hari/minggu)")
+print("4. Very Active (Olahraga berat 6-7 hari/minggu)")
+print("5. Extra Active (Olahraga sangat berat)")
+tingkat_aktivitas = (input("Pilih tingkat aktivitas: "))
+
 # 2. Hitung IMT
 def hitung_IMT(berat_badan, tinggi_badan):
     return berat_badan / (tinggi_badan / 100) ** 2
@@ -43,12 +52,36 @@ def hitung_BMR(berat_badan, tinggi_badan, usia, kelamin):
         return 655 + (9.6 * berat_badan) + (1.8 * tinggi_badan) - (4.7 * usia)
     else:
         return None
-
+    
+# 5. Menghitung Total Daily Energy Expenditure (TDEE)
+def hitung_tdee(bmr, tingkat_aktifitas):
+    if tingkat_aktifitas == "1" :
+        return bmr * 1.2
+    elif tingkat_aktifitas == "2" :
+        return bmr * 1.375
+    elif tingkat_aktifitas == "3" :
+        return bmr * 1.55
+    elif tingkat_aktifitas == "4" :
+        return bmr * 1.725
+    elif tingkat_aktifitas == "5" :
+        return bmr * 1.9
+    else:
+        return None
+    
+# 6. Menentukan kebutuhan kalori
+def hitung_kebutuhan_kalori(tdee, berat_badan, berat_badan_ideal):
+    if berat_badan < berat_badan_ideal:
+        return tdee + 500
+    elif berat_badan > berat_badan_ideal:
+        return tdee - 500
+    return tdee
 
 # Perhitungan
 imt = hitung_IMT(berat_badan, tinggi_badan)
 berat_badan_ideal = hitung_berat_badan_ideal(tinggi_badan, kelamin)
 bmr = hitung_BMR(berat_badan, tinggi_badan, usia, kelamin)
+tdee = hitung_tdee(bmr, tingkat_aktivitas)
+kebutuhan_kalori = hitung_kebutuhan_kalori(tdee, berat_badan, berat_badan_ideal)
 
 # Output
 print("\nHasil Perhitungan:")
@@ -65,3 +98,5 @@ else:
 
 print(f"Berat Badan Ideal: {berat_badan_ideal:.2f} kg")
 print(f"BMR (Basal Metabolic Rate): {bmr:.2f} kalori/hari")
+print(f"TDEE (Total Daily Energy Expenditure): {tdee:.2f} kalori/hari")
+print(f"Kebutuhan kalori harianmu untuk mencapai berat badan ideal: {kebutuhan_kalori:.2f} kalori/hari")
